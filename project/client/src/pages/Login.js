@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
-import Stack from "react-bootstrap/esm/Stack";
+import Stack from "react-bootstrap/Stack";
 
 export function Login() {
     const [loginForm, setLoginForm] = useState({
@@ -26,15 +26,20 @@ export function Login() {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(loginForm);
+        setLoginForm({ email: "", password: "" });
     };
 
     return (
-        <Container className="align-items-center">
-            <Row className="align-items-center">
-                <Col>
-                    <h1>Login</h1>
-                </Col>
-            </Row>
+        <Container>
+            <Container className="d-flex justify-content-center">
+                <Row>
+                    <Col>
+                        <h1 className="p-2 text-center text-primary font-weight-bold display-3">
+                            Welcome Back to Cover Gen!
+                        </h1>
+                    </Col>
+                </Row>
+            </Container>
 
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formEmail">
@@ -56,9 +61,14 @@ export function Login() {
                     />
                 </Form.Group>
 
-                <Button variant="primary" type="submit">
-                    Log In
-                </Button>
+                <Stack
+                    direction="horizontal"
+                    className="justify-content-center"
+                >
+                    <Button variant="primary" type="submit">
+                        Log In
+                    </Button>
+                </Stack>
             </Form>
         </Container>
     );
