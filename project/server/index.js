@@ -13,11 +13,9 @@ const PORT = process.env.PORT || 3500;
 const { userRouter } = require("./routes/userRoutes");
 
 app.use("/users", userRouter);
-
-app.use("/", (req, res) => {
-    res.send({ message: "Hello World!" });
+app.get("/", (req, res) => {
+    res.send({ message: "hello" });
 });
-
 mongoose
     .connect(mongoString)
     .then(() => {
