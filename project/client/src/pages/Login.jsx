@@ -8,9 +8,11 @@ import {
     Stack,
     Alert,
 } from "react-bootstrap";
-//import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import * as yup from "yup";
 import { Form as FormikForm, Formik, Field, ErrorMessage } from "formik";
+import { auth } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const loginSchema = yup.object().shape({
     email: yup
@@ -22,11 +24,20 @@ const loginSchema = yup.object().shape({
 
 export function Login() {
     const [error, setError] = useState(null);
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
 
-    const handleSubmit = async (values, { setSubmitting }) => {
+    const handleSubmit = async ({ email, password }, { setSubmitting }) => {
         try {
             setSubmitting(false);
+            const { user } = await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+            console.log(user);
+            const jwtToken = await user.getIdToken();
+            console.log(jwtToken);
+            navigate("../../home");
         } catch (error) {
             setError(error.message);
         }
@@ -50,8 +61,8 @@ export function Login() {
                     onClose={() => setError(null)}
                     dismissible
                 >
-                    <Alert.Heading>Incorrect Email or Password</Alert.Heading>
-                    <p>Email or password was incorrect please try again.</p>
+                    <Alert.Heading>Error</Alert.Heading>
+                    <p>{error}</p>
                 </Alert>
             )}
 
@@ -93,6 +104,11 @@ export function Login() {
                                 className="text-danger"
                             />
                         </Form.Group>
+
+                        <p>
+                            Don't have an account? Please register{" "}
+                            <Link to="../register">here</Link>
+                        </p>
 
                         <Stack
                             direction="horizontal"

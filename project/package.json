@@ -8,8 +8,7 @@
     "start": "npm run server",
     "server": "cd server && nodemon index.js",
     "client": "cd client && npm start"
-}
-,
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"
