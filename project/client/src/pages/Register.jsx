@@ -19,7 +19,21 @@ const registrationSchema = yup.object().shape({
         .string()
         .email("Invalid Email Format")
         .required("Email is required"),
-    password: yup.string().required("Password is required"),
+    password: yup
+        .string()
+        .required("Please Enter your password")
+        .matches(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
+            "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+        ),
+    resume: yup
+        .mixed()
+        .required("Resume is required")
+        .test("fileType", "Only PDF files are allowed", (value) => {
+            // Check if the uploaded file is a PDF
+            if (!value) return true; // Return true if no file is uploaded
+            return value && value.type === "application/pdf";
+        }),
 });
 
 export function Register() {
@@ -31,14 +45,18 @@ export function Register() {
         { setSubmitting }
     ) => {
         try {
-            setSubmitting(false);
+            setSubmitting(true);
             const { user } = await createUserWithEmailAndPassword(
                 auth,
                 email,
                 password
             );
+            setSubmitting(false);
             console.log(user);
-            navigate("../../home");
+            const jwtToken = await user.getIdToken();
+            navigate("../../home/profile", {
+                state: { email, password, jwtToken },
+            });
         } catch (error) {
             setError(error.message);
         }
@@ -76,7 +94,7 @@ export function Register() {
                     resume: null,
                 }}
             >
-                {({ isSubmitting, setFieldValue }) => (
+                {({ isSubmitting, setFieldValue, errors }) => (
                     <FormikForm>
                         <Form.Group className="mb-3" controlId="formEmail">
                             <Form.Label>Email address</Form.Label>
@@ -119,6 +137,18 @@ export function Register() {
                                     );
                                 }}
                             />
+                            {/* Display error message for resume field */}
+                            {errors.resume &&
+                                errors.resume.type === "fileType" && (
+                                    <div className="text-danger">
+                                        {errors.resume.message}
+                                    </div>
+                                )}
+                            {errors.resume && !errors.resume.type && (
+                                <div className="text-danger">
+                                    {errors.resume}
+                                </div>
+                            )}
                         </Form.Group>
 
                         <p>

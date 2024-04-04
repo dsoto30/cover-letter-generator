@@ -19,7 +19,13 @@ const loginSchema = yup.object().shape({
         .string()
         .email("Invalid Email Format")
         .required("Email is required"),
-    password: yup.string().required("Password is required"),
+    password: yup
+        .string()
+        .required("Please Enter your password")
+        .matches(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
+            "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+        ),
 });
 
 export function Login() {
@@ -28,16 +34,18 @@ export function Login() {
 
     const handleSubmit = async ({ email, password }, { setSubmitting }) => {
         try {
-            setSubmitting(false);
+            setSubmitting(true);
             const { user } = await signInWithEmailAndPassword(
                 auth,
                 email,
                 password
             );
-            console.log(user);
             const jwtToken = await user.getIdToken();
             console.log(jwtToken);
-            navigate("../../home");
+            setSubmitting(false);
+            navigate("../../home/profile", {
+                state: { email, password, jwtToken },
+            });
         } catch (error) {
             setError(error.message);
         }
