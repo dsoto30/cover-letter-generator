@@ -6,23 +6,13 @@ const { GridFsStorage } = require("multer-gridfs-storage");
 const mongoose = require("mongoose");
 
 const mongoURI = process.env.DATABASE_URL;
-console.log(mongoURI);
 
 let gfs;
 
-async function connectToMongo() {
-    try {
-        await mongoose.connect(mongoURI);
-        console.log("Connected to MongoDB");
-    } catch (error) {
-        console.error("Error connecting to MongoDB:", error.message);
-    }
-}
-
-connectToMongo();
-
-mongoose.connection.on("connected", () => {
-    gfs = new mongoose.mongo.GridFSBucket(mongoose.connections[0].db, {
+const connection = mongoose.createConnection(mongoURI);
+connection.on("connected", () => {
+    console.log("connected...");
+    gfs = new mongoose.mongo.GridFSBucket(connection.db, {
         bucketName: "resumes",
     });
 });
@@ -51,4 +41,4 @@ const storage = new GridFsStorage({
 
 const upload = multer({ storage });
 
-module.exports = { upload };
+module.exports = { upload, connection };

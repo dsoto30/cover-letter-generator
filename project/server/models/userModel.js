@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const { connection } = require("../middleware/middleware");
+
 const userProfileSchema = new mongoose.Schema(
     {
         email: {
@@ -21,6 +23,6 @@ const userProfileSchema = new mongoose.Schema(
     }
 );
 
-const userProfile = mongoose.model("UserProfile", userProfileSchema);
+const userProfile = connection.model("UserProfile", userProfileSchema);
 
 module.exports = { userProfile };
