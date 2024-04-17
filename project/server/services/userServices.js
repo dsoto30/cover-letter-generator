@@ -6,8 +6,19 @@ async function createUserService(email, password) {
         password: password,
     });
 
-    await newUserProfile.save();
-    return newUserProfile;
+    const newUser = await newUserProfile.save();
+    return newUser;
 }
 
-module.exports = { createUserService };
+async function createUserWithResumeService(email, password, fileId) {
+    const newUserProfile = new userProfile({
+        email: email,
+        password: password,
+        resume: fileId,
+    });
+
+    const createdUser = await newUserProfile.save();
+    return createdUser;
+}
+
+module.exports = { createUserService, createUserWithResumeService };

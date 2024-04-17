@@ -12,11 +12,11 @@ const userProfileSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        /*
+
         resume: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "resumes",
-        },*/
+        },
     },
     {
         timestamps: true,

@@ -5,12 +5,11 @@ const { upload } = require("../middleware/middleware");
 
 userRouter.post("/register", userController.createUserController);
 
-/*
 userRouter.post(
     "/create",
     upload.single("resume"),
-    userController.createUserController
-);*/
+    userController.createUserWithResumeController
+);
 
 userRouter.post(
     "/file-upload",
