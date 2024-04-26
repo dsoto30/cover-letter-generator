@@ -13,6 +13,7 @@ import * as yup from "yup";
 import { Form as FormikForm, Formik, Field, ErrorMessage } from "formik";
 import { auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useAuth } from "./AuthContext";
 
 const registrationSchema = yup.object().shape({
     email: yup
@@ -26,19 +27,13 @@ const registrationSchema = yup.object().shape({
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
             "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
         ),
-    resume: yup
-        .mixed()
-        .required("Resume is required")
-        .test("fileType", "Only PDF files are allowed", (value) => {
-            // Check if the uploaded file is a PDF
-            if (!value) return true; // Return true if no file is uploaded
-            return value && value.type === "application/pdf";
-        }),
+    resume: yup.mixed().required("resume is required"),
 });
 
 export function Register() {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const handleSubmit = async (
         { email, password, resume },
@@ -46,17 +41,27 @@ export function Register() {
     ) => {
         try {
             setSubmitting(true);
-            const { user } = await createUserWithEmailAndPassword(
+            const userCredential = await createUserWithEmailAndPassword(
                 auth,
                 email,
                 password
             );
-            setSubmitting(false);
-            console.log(user);
-            const jwtToken = await user.getIdToken();
-            navigate("../../home/profile", {
-                state: { email, password, jwtToken },
+
+            const { user } = userCredential;
+
+            const formData = new FormData();
+            formData.append("email", email);
+            formData.append("password", password);
+            formData.append("resume", resume);
+
+            await fetch("http://localhost:3500/users/create", {
+                method: "POST",
+                body: formData,
             });
+
+            login(user);
+            setSubmitting(false);
+            navigate("../profile");
         } catch (error) {
             setError(error.message);
         }
@@ -129,6 +134,7 @@ export function Register() {
                             <Form.Label>Upload Resume</Form.Label>
                             <Form.Control
                                 type="file"
+                                accept="application/pdf"
                                 name="resume"
                                 onChange={(event) => {
                                     setFieldValue(
@@ -138,17 +144,12 @@ export function Register() {
                                 }}
                             />
                             {/* Display error message for resume field */}
-                            {errors.resume &&
-                                errors.resume.type === "fileType" && (
-                                    <div className="text-danger">
-                                        {errors.resume.message}
-                                    </div>
-                                )}
-                            {errors.resume && !errors.resume.type && (
+
+                            {/*errors.resume && !errors.resume.type && (
                                 <div className="text-danger">
-                                    {errors.resume}
+                                    {errors.resume.message}
                                 </div>
-                            )}
+                            )*/}
                         </Form.Group>
 
                         <p>

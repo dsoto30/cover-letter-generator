@@ -13,6 +13,7 @@ import * as yup from "yup";
 import { Form as FormikForm, Formik, Field, ErrorMessage } from "formik";
 import { auth } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { useAuth } from "./AuthContext";
 
 const loginSchema = yup.object().shape({
     email: yup
@@ -31,21 +32,26 @@ const loginSchema = yup.object().shape({
 export function Login() {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const { login } = useAuth(); // Access the login function from AuthContext
 
     const handleSubmit = async ({ email, password }, { setSubmitting }) => {
         try {
             setSubmitting(true);
-            const { user } = await signInWithEmailAndPassword(
+            const userCredential = await signInWithEmailAndPassword(
                 auth,
                 email,
                 password
             );
-            const jwtToken = await user.getIdToken();
-            console.log(jwtToken);
+
+            const { user } = userCredential;
+
+            console.log(user);
+
+            // Set user in AuthContext upon successful login
+            login(user);
+
             setSubmitting(false);
-            navigate("../../home/profile", {
-                state: { email, password, jwtToken },
-            });
+            navigate("../home/profile");
         } catch (error) {
             setError(error.message);
         }

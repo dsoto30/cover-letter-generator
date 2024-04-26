@@ -1,20 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 
 export function Profile() {
-    const location = useLocation();
-    const { state } = location;
-    const { email, password, jwtToken } = state || {};
+    const { user } = useAuth();
+    const [profileInfo, setProfileInfo] = useState(null);
+
+    useEffect(() => {
+        const getUserProfile = async () => {
+            try {
+                if (user) {
+                    /* 
+                    const response = await fetch(
+                        "http://localhost:3500/users/profile"
+                    );*/
+                }
+            } catch (error) {}
+        };
+    }, [user]);
+
     return (
         <Container>
-            <h1>Profile Information</h1>
-            <ul>
-                <li>Email: {email}</li>
-                <li>Password: {password}</li>
-                <li>Resume file name: {"my-resume.pdf"}</li>
-                <li>Token: {jwtToken}</li>
-            </ul>
+            <h1>User Information</h1>
+            {user ? (
+                <ul>
+                    <li>Email: {user.email}</li>
+                    {/* Displaying password is not recommended for security reasons */}
+                </ul>
+            ) : (
+                <p>No user information available.</p>
+            )}
         </Container>
     );
 }
