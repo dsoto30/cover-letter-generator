@@ -11,9 +11,7 @@ import {
 import { useNavigate, Link } from "react-router-dom";
 import * as yup from "yup";
 import { Form as FormikForm, Formik, Field, ErrorMessage } from "formik";
-import { auth } from "../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 const loginSchema = yup.object().shape({
     email: yup
@@ -37,21 +35,9 @@ export function Login() {
     const handleSubmit = async ({ email, password }, { setSubmitting }) => {
         try {
             setSubmitting(true);
-            const userCredential = await signInWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
-
-            const { user } = userCredential;
-
-            console.log(user);
-
-            // Set user in AuthContext upon successful login
-            login(user);
-
+            await login(email, password);
             setSubmitting(false);
-            navigate("../home/profile");
+            navigate("../profile");
         } catch (error) {
             setError(error.message);
         }

@@ -11,9 +11,7 @@ import {
 import { useNavigate, Link } from "react-router-dom";
 import * as yup from "yup";
 import { Form as FormikForm, Formik, Field, ErrorMessage } from "formik";
-import { auth } from "../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 const registrationSchema = yup.object().shape({
     email: yup
@@ -31,9 +29,9 @@ const registrationSchema = yup.object().shape({
 });
 
 export function Register() {
-    const [error, setError] = useState(null);
+    const [error, setError] = useState("");
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { signUp } = useAuth();
 
     const handleSubmit = async (
         { email, password, resume },
@@ -41,14 +39,10 @@ export function Register() {
     ) => {
         try {
             setSubmitting(true);
-            const userCredential = await createUserWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
 
-            const { user } = userCredential;
+            await signUp(email, password);
 
+            /*
             const formData = new FormData();
             formData.append("email", email);
             formData.append("password", password);
@@ -57,11 +51,10 @@ export function Register() {
             await fetch("http://localhost:3500/users/create", {
                 method: "POST",
                 body: formData,
-            });
+            });*/
 
-            login(user);
             setSubmitting(false);
-            navigate("../profile");
+            navigate("/auth/profile");
         } catch (error) {
             setError(error.message);
         }
@@ -143,13 +136,12 @@ export function Register() {
                                     );
                                 }}
                             />
-                            {/* Display error message for resume field */}
 
-                            {/*errors.resume && !errors.resume.type && (
+                            {errors.resume && (
                                 <div className="text-danger">
-                                    {errors.resume.message}
+                                    {errors.resume}
                                 </div>
-                            )*/}
+                            )}
                         </Form.Group>
 
                         <p>
