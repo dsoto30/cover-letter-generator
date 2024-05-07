@@ -14,6 +14,7 @@ import { Form as FormikForm, Formik, Field, ErrorMessage } from "formik";
 import { useAuth } from "../contexts/AuthContext";
 
 const registrationSchema = yup.object().shape({
+    displayName: yup.string().required(),
     email: yup
         .string()
         .email("Invalid Email Format")
@@ -34,13 +35,13 @@ export function Register() {
     const { signUp } = useAuth();
 
     const handleSubmit = async (
-        { email, password, resume },
+        { email, password, resume, displayName },
         { setSubmitting }
     ) => {
         try {
             setSubmitting(true);
 
-            await signUp(email, password);
+            await signUp(email, password, displayName);
 
             /*
             const formData = new FormData();
@@ -90,10 +91,29 @@ export function Register() {
                     email: "",
                     password: "",
                     resume: null,
+                    displayName: "",
                 }}
             >
                 {({ isSubmitting, setFieldValue, errors }) => (
                     <FormikForm>
+                        <Form.Group
+                            className="mb-3"
+                            controlId="formDisplayName"
+                        >
+                            <Form.Label>Display Name</Form.Label>
+                            <Field
+                                type="string"
+                                name="displayName"
+                                placeholder="Enter display name"
+                                as={Form.Control}
+                            />
+                            <ErrorMessage
+                                name="displayName"
+                                component="div"
+                                className="text-danger"
+                            />
+                        </Form.Group>
+
                         <Form.Group className="mb-3" controlId="formEmail">
                             <Form.Label>Email address</Form.Label>
                             <Field

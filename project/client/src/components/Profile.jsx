@@ -2,7 +2,6 @@ import React from "react";
 import { Container, Card, Button, Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 export function Profile() {
     const { currentUser, logout } = useAuth();

@@ -13,6 +13,7 @@ import {
     onAuthStateChanged,
     signInWithEmailAndPassword,
     signOut,
+    updateProfile,
 } from "firebase/auth";
 
 const AuthContext = createContext();
@@ -30,8 +31,18 @@ export const AuthProvider = ({ children }) => {
         return unsubscribe;
     }, []);
 
-    const signUp = useCallback((email, password) => {
-        return createUserWithEmailAndPassword(auth, email, password);
+    const signUp = useCallback(async (email, password, displayName) => {
+        try {
+            const { user } = await createUserWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+
+            await updateProfile(user, { displayName: displayName });
+        } catch (error) {
+            throw error;
+        }
     }, []);
 
     const login = useCallback((email, password) => {
