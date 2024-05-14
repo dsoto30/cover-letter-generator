@@ -32,7 +32,7 @@ const registrationSchema = yup.object().shape({
 export function Register() {
     const [error, setError] = useState("");
     const navigate = useNavigate();
-    const { signUp } = useAuth();
+    const { signUp, updateDisplayName } = useAuth();
 
     const handleSubmit = async (
         { email, password, resume, displayName },
@@ -41,7 +41,8 @@ export function Register() {
         try {
             setSubmitting(true);
 
-            await signUp(email, password, displayName);
+            await signUp(email, password);
+            await updateDisplayName(displayName);
 
             /*
             const formData = new FormData();
