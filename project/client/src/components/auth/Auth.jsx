@@ -1,6 +1,6 @@
 import { Register } from "./Register";
 import { Login } from "./Login";
-import { Profile } from "./Profile";
+import { Profile } from "../Profile";
 import { PrivateRoute } from "./PrivateRoute";
 import { Routes, Route } from "react-router-dom";
 import React from "react";

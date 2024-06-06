@@ -1,19 +1,23 @@
-import React from "react";
-import { Container, Card, Button, Alert } from "react-bootstrap";
-import { useAuth } from "../contexts/AuthContext";
-import { useState } from "react";
+import React, { useState } from "react";
+import { Container, Card, Button, Alert, Stack } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser, setLoading } from "../redux/authSlice";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
+import { logout } from "../redux/authSlice";
 
 export function Profile() {
-    const { currentUser, logout } = useAuth();
-    const [error, setError] = useState();
-
+    const [error, setError] = useState(null);
+    const dispatch = useDispatch();
+    const currentUser = useSelector(selectUser);
     const handleLogout = async () => {
-        // Implement logout functionality here
-        setError("");
         try {
-            await logout();
+            dispatch(setLoading(true));
+            dispatch(logout());
+            await signOut(auth);
+            dispatch(setLoading(false));
         } catch (error) {
-            setError(error.message);
+            console.log(error);
         }
     };
 
@@ -39,9 +43,15 @@ export function Profile() {
                         <strong>Email:</strong> {currentUser.email}
                     </Card.Text>
                     {/* You can add more user information here */}
-                    <Button variant="primary" onClick={handleLogout}>
-                        Logout
-                    </Button>
+                    <Stack
+                        direction="horizontal"
+                        className="justify-content-between"
+                    >
+                        <Button variant="primary" onClick={handleLogout}>
+                            Logout
+                        </Button>
+                        <Button variant="info">Update Profile</Button>
+                    </Stack>
                 </Card.Body>
             </Card>
         </Container>

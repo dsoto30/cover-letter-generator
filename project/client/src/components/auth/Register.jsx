@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
     Container,
     Row,
@@ -11,7 +10,11 @@ import {
 import { useNavigate, Link } from "react-router-dom";
 import * as yup from "yup";
 import { Form as FormikForm, Formik, Field, ErrorMessage } from "formik";
-import { useAuth } from "../contexts/AuthContext";
+import { useDispatch } from "react-redux";
+import { setLoading, setUser } from "../../redux/authSlice";
+import { useState } from "react";
+import { auth } from "../../firebase";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 const registrationSchema = yup.object().shape({
     displayName: yup.string().required(),
@@ -30,9 +33,9 @@ const registrationSchema = yup.object().shape({
 });
 
 export function Register() {
-    const [error, setError] = useState("");
     const navigate = useNavigate();
-    const { signUp, updateDisplayName } = useAuth();
+    const [error, setError] = useState(null);
+    const dispatch = useDispatch();
 
     const handleSubmit = async (
         { email, password, resume, displayName },
@@ -41,25 +44,25 @@ export function Register() {
         try {
             setSubmitting(true);
 
-            await signUp(email, password);
-            await updateDisplayName(displayName);
+            dispatch(setLoading(true));
 
-            /*
-            const formData = new FormData();
-            formData.append("email", email);
-            formData.append("password", password);
-            formData.append("resume", resume);
+            await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(auth.currentUser, {
+                displayName: displayName,
+            });
 
-            await fetch("http://localhost:3500/users/create", {
-                method: "POST",
-                body: formData,
-            });*/
-
+            const user = auth.currentUser;
+            dispatch(
+                setUser({
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName,
+                })
+            );
+            dispatch(setLoading(false));
             setSubmitting(false);
             navigate("/auth/profile");
-        } catch (error) {
-            setError(error.message);
-        }
+        } catch (error) {}
     };
 
     return (

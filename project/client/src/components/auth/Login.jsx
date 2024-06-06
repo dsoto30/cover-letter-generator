@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
     Container,
     Row,
@@ -11,7 +10,12 @@ import {
 import { useNavigate, Link } from "react-router-dom";
 import * as yup from "yup";
 import { Form as FormikForm, Formik, Field, ErrorMessage } from "formik";
-import { useAuth } from "../contexts/AuthContext";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { setLoading } from "../../redux/authSlice";
+
+import { auth } from "../../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const loginSchema = yup.object().shape({
     email: yup
@@ -28,14 +32,15 @@ const loginSchema = yup.object().shape({
 });
 
 export function Login() {
-    const [error, setError] = useState(null);
     const navigate = useNavigate();
-    const { login } = useAuth(); // Access the login function from AuthContext
-
+    const dispatch = useDispatch();
+    const [error, setError] = useState(null);
     const handleSubmit = async ({ email, password }, { setSubmitting }) => {
         try {
             setSubmitting(true);
-            await login(email, password);
+            dispatch(setLoading(true));
+            await signInWithEmailAndPassword(auth, email, password);
+            dispatch(setLoading(false));
             setSubmitting(false);
             navigate("../profile");
         } catch (error) {
