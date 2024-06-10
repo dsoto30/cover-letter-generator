@@ -1,12 +1,12 @@
 import React from "react";
-import { Spinner } from "react-bootstrap";
+import { FaSpinner } from "react-icons/fa";
+import "./Loading.css";
 
 const Loading = () => {
     return (
         <div className="loading">
-            <Spinner animation="border" role="status">
-                <span className="sr-only">Loading...</span>
-            </Spinner>
+            <FaSpinner className="spinner" />
+            <span className="loading-text">Loading...</span>
         </div>
     );
 };

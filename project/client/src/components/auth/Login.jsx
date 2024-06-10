@@ -35,13 +35,11 @@ export function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [error, setError] = useState(null);
-    const handleSubmit = async ({ email, password }, { setSubmitting }) => {
+    const handleSubmit = async ({ email, password }) => {
         try {
-            setSubmitting(true);
             dispatch(setLoading(true));
             await signInWithEmailAndPassword(auth, email, password);
             dispatch(setLoading(false));
-            setSubmitting(false);
             navigate("../profile");
         } catch (error) {
             setError(error.message);

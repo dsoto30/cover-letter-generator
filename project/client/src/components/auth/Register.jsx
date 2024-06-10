@@ -37,13 +37,8 @@ export function Register() {
     const [error, setError] = useState(null);
     const dispatch = useDispatch();
 
-    const handleSubmit = async (
-        { email, password, resume, displayName },
-        { setSubmitting }
-    ) => {
+    const handleSubmit = async ({ email, password, resume, displayName }) => {
         try {
-            setSubmitting(true);
-
             dispatch(setLoading(true));
 
             await createUserWithEmailAndPassword(auth, email, password);
@@ -60,7 +55,6 @@ export function Register() {
                 })
             );
             dispatch(setLoading(false));
-            setSubmitting(false);
             navigate("/auth/profile");
         } catch (error) {}
     };
