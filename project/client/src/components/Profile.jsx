@@ -1,23 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Card, Button, Alert, Stack } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser, setLoading } from "../redux/authSlice";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
-import { logout } from "../redux/authSlice";
+import { selectUser } from "../redux/authSlice";
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { useAuthService } from "./auth/useAuthService";
+import { selectError, setError } from "../redux/authSlice";
 
 export function Profile() {
-    const [error, setError] = useState(null);
+    const [resume, setResume] = useState(null);
     const dispatch = useDispatch();
     const currentUser = useSelector(selectUser);
+    const { logoutUser } = useAuthService();
+    const error = useSelector(selectError);
+
+    useEffect(() => {
+        const fetchResume = async () => {
+            if (currentUser && currentUser.uid) {
+                const docRef = doc(db, "resumes", currentUser.uid);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    setResume(docSnap.data());
+                } else {
+                    console.log("No resume found");
+                }
+            }
+        };
+
+        fetchResume();
+    }, [currentUser]);
+
     const handleLogout = async () => {
         try {
-            dispatch(setLoading(true));
-            dispatch(logout());
-            await signOut(auth);
-            dispatch(setLoading(false));
+            await logoutUser();
         } catch (error) {
-            console.log(error);
+            dispatch(setError(error.message));
         }
     };
 
@@ -27,7 +45,7 @@ export function Profile() {
             {error && (
                 <Alert
                     variant="danger"
-                    onClose={() => setError(null)}
+                    onClose={() => dispatch(setError(null))}
                     dismissible
                 >
                     <Alert.Heading>Error</Alert.Heading>
@@ -42,7 +60,25 @@ export function Profile() {
                     <Card.Text>
                         <strong>Email:</strong> {currentUser.email}
                     </Card.Text>
-                    {/* You can add more user information here */}
+                    {resume ? (
+                        <Card.Text>
+                            <strong>Resume:</strong>{" "}
+                            <a
+                                href={resume.resume}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                View Resume
+                            </a>
+                            <br />
+                            <strong>Last updated:</strong>{" "}
+                            {new Date(
+                                resume.updatedAt.toDate()
+                            ).toLocaleString()}
+                        </Card.Text>
+                    ) : (
+                        <Card.Text>No resume uploaded.</Card.Text>
+                    )}
                     <Stack
                         direction="horizontal"
                         className="justify-content-between"

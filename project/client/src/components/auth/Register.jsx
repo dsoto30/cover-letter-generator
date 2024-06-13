@@ -11,10 +11,9 @@ import { useNavigate, Link } from "react-router-dom";
 import * as yup from "yup";
 import { Form as FormikForm, Formik, Field, ErrorMessage } from "formik";
 import { useDispatch } from "react-redux";
-import { setLoading, setUser } from "../../redux/authSlice";
-import { useState } from "react";
-import { auth } from "../../firebase";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { useAuthService } from "./useAuthService";
+import { selectError, setError } from "../../redux/authSlice";
+import { useSelector } from "react-redux";
 
 const registrationSchema = yup.object().shape({
     displayName: yup.string().required(),
@@ -34,29 +33,17 @@ const registrationSchema = yup.object().shape({
 
 export function Register() {
     const navigate = useNavigate();
-    const [error, setError] = useState(null);
+    const { registerUser } = useAuthService();
+    const error = useSelector(selectError);
     const dispatch = useDispatch();
 
     const handleSubmit = async ({ email, password, resume, displayName }) => {
         try {
-            dispatch(setLoading(true));
-
-            await createUserWithEmailAndPassword(auth, email, password);
-            await updateProfile(auth.currentUser, {
-                displayName: displayName,
-            });
-
-            const user = auth.currentUser;
-            dispatch(
-                setUser({
-                    uid: user.uid,
-                    email: user.email,
-                    displayName: user.displayName,
-                })
-            );
-            dispatch(setLoading(false));
+            await registerUser({ email, password, resume, displayName });
             navigate("/auth/profile");
-        } catch (error) {}
+        } catch (error) {
+            dispatch(setError(error.message));
+        }
     };
 
     return (
@@ -74,7 +61,7 @@ export function Register() {
             {error && (
                 <Alert
                     variant="danger"
-                    onClose={() => setError(null)}
+                    onClose={() => dispatch(setError(null))}
                     dismissible
                 >
                     <Alert.Heading>Error</Alert.Heading>
