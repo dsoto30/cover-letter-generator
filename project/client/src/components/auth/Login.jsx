@@ -10,12 +10,9 @@ import {
 import { useNavigate, Link } from "react-router-dom";
 import * as yup from "yup";
 import { Form as FormikForm, Formik, Field, ErrorMessage } from "formik";
-import { useDispatch } from "react-redux";
-import { useState } from "react";
-import { setLoading } from "../../redux/authSlice";
-
-import { auth } from "../../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { useAuthService } from "./useAuthService";
+import { useSelector, useDispatch } from "react-redux";
+import { selectError, setError } from "../../redux/authSlice";
 
 const loginSchema = yup.object().shape({
     email: yup
@@ -34,17 +31,14 @@ const loginSchema = yup.object().shape({
 export function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [error, setError] = useState(null);
-    const handleSubmit = async ({ email, password }, { setSubmitting }) => {
+    const { loginUser } = useAuthService();
+    const error = useSelector(selectError);
+    const handleSubmit = async ({ email, password }) => {
         try {
-            setSubmitting(true);
-            dispatch(setLoading(true));
-            await signInWithEmailAndPassword(auth, email, password);
-            dispatch(setLoading(false));
-            setSubmitting(false);
-            navigate("../profile");
+            await loginUser({ email, password });
+            navigate("/auth/profile");
         } catch (error) {
-            setError(error.message);
+            dispatch(setError(error.message));
         }
     };
 
@@ -63,7 +57,7 @@ export function Login() {
             {error && (
                 <Alert
                     variant="danger"
-                    onClose={() => setError(null)}
+                    onClose={() => dispatch(setError(null))}
                     dismissible
                 >
                     <Alert.Heading>Error</Alert.Heading>
