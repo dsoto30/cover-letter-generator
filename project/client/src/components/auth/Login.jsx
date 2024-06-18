@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import {
     Container,
     Row,
@@ -33,6 +34,7 @@ export function Login() {
     const dispatch = useDispatch();
     const { loginUser } = useAuthService();
     const error = useSelector(selectError);
+
     const handleSubmit = async ({ email, password }) => {
         try {
             await loginUser({ email, password });
@@ -42,8 +44,34 @@ export function Login() {
         }
     };
 
+    useEffect(() => {
+        if (error) {
+            const timer = setTimeout(() => {
+                dispatch(setError(null));
+            }, 5000); // 5 seconds
+
+            return () => clearTimeout(timer);
+        }
+    }, [error, dispatch]);
+
+    useEffect(() => {
+        return () => {
+            dispatch(setError(null));
+        };
+    }, [dispatch]);
+
     return (
         <Container>
+            {error && (
+                <Alert
+                    variant="danger"
+                    onClose={() => dispatch(setError(null))}
+                    dismissible
+                >
+                    {error}
+                </Alert>
+            )}
+
             <Container className="d-flex justify-content-center">
                 <Row>
                     <Col>
@@ -54,17 +82,6 @@ export function Login() {
                 </Row>
             </Container>
 
-            {error && (
-                <Alert
-                    variant="danger"
-                    onClose={() => dispatch(setError(null))}
-                    dismissible
-                >
-                    <Alert.Heading>Error</Alert.Heading>
-                    <p>{error}</p>
-                </Alert>
-            )}
-
             <Formik
                 validationSchema={loginSchema}
                 onSubmit={handleSubmit}
@@ -73,7 +90,7 @@ export function Login() {
                     password: "",
                 }}
             >
-                {({ isSubmitting }) => (
+                {() => (
                     <FormikForm>
                         <Form.Group className="mb-3" controlId="formEmail">
                             <Form.Label>Email address</Form.Label>
@@ -113,12 +130,8 @@ export function Login() {
                             direction="horizontal"
                             className="justify-content-center"
                         >
-                            <Button
-                                variant="primary"
-                                type="submit"
-                                disabled={isSubmitting}
-                            >
-                                {isSubmitting ? "Logging in..." : "Log In"}
+                            <Button variant="primary" type="submit">
+                                {"Log In"}
                             </Button>
                         </Stack>
                     </FormikForm>
