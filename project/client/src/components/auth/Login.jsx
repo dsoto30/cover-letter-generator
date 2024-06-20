@@ -62,16 +62,6 @@ export function Login() {
 
     return (
         <Container>
-            {error && (
-                <Alert
-                    variant="danger"
-                    onClose={() => dispatch(setError(null))}
-                    dismissible
-                >
-                    {error}
-                </Alert>
-            )}
-
             <Container className="d-flex justify-content-center">
                 <Row>
                     <Col>
@@ -81,6 +71,16 @@ export function Login() {
                     </Col>
                 </Row>
             </Container>
+
+            {error && (
+                <Alert
+                    variant="danger"
+                    onClose={() => dispatch(setError(null))}
+                    dismissible
+                >
+                    {error}
+                </Alert>
+            )}
 
             <Formik
                 validationSchema={loginSchema}

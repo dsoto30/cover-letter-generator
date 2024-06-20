@@ -4,9 +4,17 @@ import {
     signInWithEmailAndPassword,
     signOut,
     updateProfile,
+    updatePassword,
+    reauthenticateWithCredential,
+    EmailAuthProvider,
 } from "firebase/auth";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, setDoc } from "firebase/firestore";
+import {
+    ref,
+    uploadBytesResumable,
+    getDownloadURL,
+    deleteObject,
+} from "firebase/storage";
+import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
 import { auth, storage, db } from "../../firebase";
 import { setUser, setLoading, logout, setError } from "../../redux/authSlice";
 
@@ -41,16 +49,6 @@ export const useAuthService = () => {
                             (snapshot.bytesTransferred / snapshot.totalBytes) *
                             100;
                         console.log("Upload is " + progress + "% done");
-                        switch (snapshot.state) {
-                            case "paused":
-                                console.log("Upload is paused");
-                                break;
-                            case "running":
-                                console.log("Upload is running");
-                                break;
-                            default:
-                                break;
-                        }
                     },
                     (error) => {
                         console.error(error.code);
@@ -63,8 +61,6 @@ export const useAuthService = () => {
                             );
                             await setDoc(doc(db, "resumes", user.uid), {
                                 uid: user.uid,
-                                email: user.email,
-                                displayName: user.displayName,
                                 resume: downloadURL,
                                 updatedAt: new Date(),
                             });
@@ -96,6 +92,101 @@ export const useAuthService = () => {
         }
     };
 
+    const handleReauth = async (originalPassword) => {
+        try {
+            const credential = EmailAuthProvider.credential(
+                auth.currentUser.email,
+                originalPassword
+            );
+            await reauthenticateWithCredential(auth.currentUser, credential);
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    const updateUserProfile = async ({
+        displayName,
+        password,
+        resume,
+        originalPassword,
+    }) => {
+        try {
+            dispatch(setLoading(true));
+
+            await handleReauth(originalPassword);
+
+            if (displayName && displayName !== auth.currentUser.displayName) {
+                await updateProfile(auth.currentUser, { displayName });
+            }
+
+            if (password && password !== auth.currentUser.password) {
+                await updatePassword(auth.currentUser, password);
+            }
+
+            if (resume) {
+                const storageRef = ref(
+                    storage,
+                    `resumes/${auth.currentUser.uid}`
+                );
+                const userDocRef = doc(db, "resumes", auth.currentUser.uid);
+                const userDoc = await getDoc(userDocRef);
+                const resumeUrl = userDoc.data()?.resume;
+
+                if (resumeUrl) {
+                    const resumeRef = ref(storage, resumeUrl);
+                    await deleteObject(resumeRef);
+                }
+
+                const upload = uploadBytesResumable(storageRef, resume, {
+                    contentType: "application/pdf",
+                });
+                await new Promise((resolve, reject) => {
+                    upload.on(
+                        "state_changed",
+                        (snapshot) => {
+                            const progress =
+                                (snapshot.bytesTransferred /
+                                    snapshot.totalBytes) *
+                                100;
+                            console.log("Upload is " + progress + "% done");
+                        },
+                        (error) => {
+                            console.error(error.code);
+                            reject(new Error(error.code));
+                        },
+                        async () => {
+                            try {
+                                const downloadURL = await getDownloadURL(
+                                    upload.snapshot.ref
+                                );
+                                await updateDoc(userDocRef, {
+                                    resume: downloadURL,
+                                    updatedAt: new Date(),
+                                });
+                                resolve();
+                            } catch (error) {
+                                reject(new Error(error.message));
+                            }
+                        }
+                    );
+                });
+            }
+            const user = auth.currentUser;
+            dispatch(
+                setUser({
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName,
+                })
+            );
+            dispatch(setError(null));
+            dispatch(setLoading(false));
+        } catch (error) {
+            dispatch(setLoading(false));
+            throw error;
+        }
+    };
+
     const logoutUser = async () => {
         try {
             dispatch(setLoading(true));
@@ -113,5 +204,6 @@ export const useAuthService = () => {
         registerUser,
         loginUser,
         logoutUser,
+        updateUserProfile,
     };
 };

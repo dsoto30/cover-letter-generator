@@ -8,42 +8,54 @@ import {
     Stack,
     Alert,
 } from "react-bootstrap";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Formik, Form as FormikForm, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
-import { Form as FormikForm, Formik, Field, ErrorMessage } from "formik";
-import { useDispatch } from "react-redux";
 import { useAuthService } from "./useAuthService";
-import { selectError, setError } from "../../redux/authSlice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setError, selectError } from "../../redux/authSlice";
 
-const registrationSchema = yup.object().shape({
-    displayName: yup.string().required(),
-    email: yup
-        .string()
-        .email("Invalid Email Format")
-        .required("Email is required"),
-    password: yup
+const updateProfileSchema = yup.object().shape({
+    originalPassword: yup
         .string()
         .required("Please Enter your password")
         .matches(
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
             "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
         ),
-    resume: yup.mixed().required("resume is required"),
+    displayName: yup.string().notRequired(),
+    password: yup
+        .string()
+        .notRequired()
+        .matches(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
+            "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+        ),
+    resume: yup.mixed().notRequired(),
 });
 
-export function Register() {
+export function UpdateProfile() {
+    const { updateUserProfile } = useAuthService();
     const navigate = useNavigate();
-    const { registerUser } = useAuthService();
     const error = useSelector(selectError);
     const dispatch = useDispatch();
 
-    const handleSubmit = async ({ email, password, resume, displayName }) => {
+    const handleSubmit = async ({
+        displayName,
+        password,
+        resume,
+        originalPassword,
+    }) => {
         try {
-            await registerUser({ email, password, resume, displayName });
+            await updateUserProfile({
+                displayName,
+                password,
+                resume,
+                originalPassword,
+            });
             navigate("/auth/profile");
-        } catch (error) {
-            dispatch(setError(error.message));
+        } catch (e) {
+            dispatch(setError(e.message));
         }
     };
 
@@ -69,7 +81,7 @@ export function Register() {
                 <Row>
                     <Col>
                         <h1 className="p-2 text-center text-primary font-weight-bold display-3">
-                            Registration
+                            Update Profile
                         </h1>
                     </Col>
                 </Row>
@@ -81,50 +93,54 @@ export function Register() {
                     onClose={() => dispatch(setError(null))}
                     dismissible
                 >
-                    {error}
+                    <Alert.Heading>Error</Alert.Heading>
+                    <p>{error}</p>
                 </Alert>
             )}
 
             <Formik
-                validationSchema={registrationSchema}
+                validationSchema={updateProfileSchema}
                 onSubmit={handleSubmit}
                 initialValues={{
-                    email: "",
+                    displayName: "",
                     password: "",
                     resume: null,
-                    displayName: "",
+                    originalPassword: "",
                 }}
             >
-                {({ setFieldValue, errors }) => (
+                {({ setFieldValue }) => (
                     <FormikForm>
+                        <Form.Group
+                            className="mb-3"
+                            controlId="formOriginalPassword"
+                        >
+                            <Form.Label>Original Password</Form.Label>
+                            <Field
+                                type="password"
+                                name="originalPassword"
+                                placeholder="Enter original password"
+                                as={Form.Control}
+                            />
+                            <ErrorMessage
+                                name="originalPassword"
+                                component="div"
+                                className="text-danger"
+                            />
+                        </Form.Group>
+
                         <Form.Group
                             className="mb-3"
                             controlId="formDisplayName"
                         >
                             <Form.Label>Display Name</Form.Label>
                             <Field
-                                type="string"
+                                type="text"
                                 name="displayName"
-                                placeholder="Enter display name"
+                                placeholder="Enter new display name"
                                 as={Form.Control}
                             />
                             <ErrorMessage
                                 name="displayName"
-                                component="div"
-                                className="text-danger"
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="formEmail">
-                            <Form.Label>Email address</Form.Label>
-                            <Field
-                                type="email"
-                                name="email"
-                                placeholder="Enter email"
-                                as={Form.Control}
-                            />
-                            <ErrorMessage
-                                name="email"
                                 component="div"
                                 className="text-danger"
                             />
@@ -134,7 +150,7 @@ export function Register() {
                             <Field
                                 type="password"
                                 name="password"
-                                placeholder="Password"
+                                placeholder="Enter new password"
                                 as={Form.Control}
                             />
                             <ErrorMessage
@@ -143,13 +159,12 @@ export function Register() {
                                 className="text-danger"
                             />
                         </Form.Group>
-
                         <Form.Group className="mb-3" controlId="formResume">
-                            <Form.Label>Upload Resume</Form.Label>
-                            <Form.Control
+                            <Form.Label>Resume</Form.Label>
+                            <input
                                 type="file"
-                                accept="application/pdf"
                                 name="resume"
+                                className="form-control"
                                 onChange={(event) => {
                                     setFieldValue(
                                         "resume",
@@ -157,25 +172,18 @@ export function Register() {
                                     );
                                 }}
                             />
-
-                            {errors.resume && (
-                                <div className="text-danger">
-                                    {errors.resume}
-                                </div>
-                            )}
+                            <ErrorMessage
+                                name="resume"
+                                component="div"
+                                className="text-danger"
+                            />
                         </Form.Group>
-
-                        <p>
-                            Already have an account? Please login{" "}
-                            <Link to="../login">here</Link>
-                        </p>
-
                         <Stack
                             direction="horizontal"
                             className="justify-content-center"
                         >
                             <Button variant="primary" type="submit">
-                                {"Register"}
+                                {"Update Profile"}
                             </Button>
                         </Stack>
                     </FormikForm>
