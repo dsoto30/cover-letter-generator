@@ -72,7 +72,6 @@ export const useAuthService = () => {
                 );
             });
 
-            dispatch(setError(null));
             dispatch(setLoading(false));
         } catch (error) {
             dispatch(setLoading(false));
@@ -84,7 +83,6 @@ export const useAuthService = () => {
         try {
             dispatch(setLoading(true));
             await signInWithEmailAndPassword(auth, email, password);
-            dispatch(setError(null));
             dispatch(setLoading(false));
         } catch (error) {
             dispatch(setLoading(false));
@@ -179,7 +177,6 @@ export const useAuthService = () => {
                     displayName: user.displayName,
                 })
             );
-            dispatch(setError(null));
             dispatch(setLoading(false));
         } catch (error) {
             dispatch(setLoading(false));
@@ -192,7 +189,6 @@ export const useAuthService = () => {
             dispatch(setLoading(true));
             await signOut(auth);
             dispatch(logout());
-            dispatch(setError(null));
             dispatch(setLoading(false));
         } catch (error) {
             dispatch(setLoading(false));

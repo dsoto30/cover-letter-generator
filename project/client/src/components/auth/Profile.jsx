@@ -32,6 +32,12 @@ export function Profile() {
         fetchResume();
     }, [currentUser]);
 
+    useEffect(() => {
+        return () => {
+            dispatch(setError(null));
+        };
+    }, [dispatch]);
+
     const handleLogout = async () => {
         try {
             await logoutUser();

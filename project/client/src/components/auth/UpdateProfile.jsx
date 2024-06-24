@@ -75,6 +75,10 @@ export function UpdateProfile() {
         };
     }, [dispatch]);
 
+    const cancelUpdate = () => {
+        navigate("/auth/profile");
+    };
+
     return (
         <Container>
             <Container className="d-flex justify-content-center">
@@ -181,9 +185,17 @@ export function UpdateProfile() {
                         <Stack
                             direction="horizontal"
                             className="justify-content-center"
+                            gap={3}
                         >
                             <Button variant="primary" type="submit">
                                 {"Update Profile"}
+                            </Button>
+                            <Button
+                                variant="danger"
+                                type="button"
+                                onClick={cancelUpdate}
+                            >
+                                {"Cancel"}
                             </Button>
                         </Stack>
                     </FormikForm>
