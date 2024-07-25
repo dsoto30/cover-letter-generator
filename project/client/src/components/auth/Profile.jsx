@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Container, Card, Button, Alert, Stack } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser, selectError, setError } from "../../redux/authSlice";
-import { db } from "../../firebase";
-import { doc, getDoc } from "firebase/firestore";
+import {
+    selectUser,
+    selectError,
+    setError,
+    setLoading,
+} from "../../redux/authSlice";
 import { useAuthService } from "./useAuthService";
 import { useNavigate } from "react-router-dom";
+import { fetchResume } from "./fetchResume";
 
 export function Profile() {
     const [resume, setResume] = useState(null);
@@ -16,21 +20,16 @@ export function Profile() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchResume = async () => {
-            if (currentUser && currentUser.uid) {
-                const docRef = doc(db, "resumes", currentUser.uid);
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    setResume(docSnap.data());
-                } else {
-                    console.log("No resume found");
-                }
+        const fetch = async () => {
+            try {
+                const resume = await fetchResume(currentUser.uid);
+                setResume(resume);
+            } catch (error) {
+                dispatch(setError(error.message));
             }
         };
-
-        fetchResume();
-    }, [currentUser]);
+        fetch();
+    });
 
     useEffect(() => {
         return () => {
@@ -98,9 +97,10 @@ export function Profile() {
                         <Button variant="primary" onClick={handleLogout}>
                             Logout
                         </Button>
+                        {/* 
                         <Button variant="info" onClick={update}>
                             Update Profile
-                        </Button>
+                        </Button>*/}
                     </Stack>
                 </Card.Body>
             </Card>

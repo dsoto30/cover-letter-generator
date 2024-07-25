@@ -16,7 +16,7 @@ import {
 } from "firebase/storage";
 import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
 import { auth, storage, db } from "../../firebase";
-import { setUser, setLoading, logout, setError } from "../../redux/authSlice";
+import { setUser, setLoading, logout } from "../../redux/authSlice";
 
 export const useAuthService = () => {
     const dispatch = useDispatch();
@@ -27,19 +27,12 @@ export const useAuthService = () => {
             await createUserWithEmailAndPassword(auth, email, password);
             await updateProfile(auth.currentUser, { displayName });
 
-            const user = auth.currentUser;
-            dispatch(
-                setUser({
-                    uid: user.uid,
-                    email: user.email,
-                    displayName: user.displayName,
-                })
-            );
-
             const storageRef = ref(storage, `resumes/${user.uid}`);
             const upload = uploadBytesResumable(storageRef, resume, {
                 contentType: "application/pdf",
             });
+
+            const user = auth.currentUser;
 
             await new Promise((resolve, reject) => {
                 upload.on(
@@ -48,10 +41,8 @@ export const useAuthService = () => {
                         const progress =
                             (snapshot.bytesTransferred / snapshot.totalBytes) *
                             100;
-                        console.log("Upload is " + progress + "% done");
                     },
                     (error) => {
-                        console.error(error.code);
                         reject(new Error(error.code));
                     },
                     async () => {
@@ -63,6 +54,7 @@ export const useAuthService = () => {
                                 uid: user.uid,
                                 resume: downloadURL,
                                 updatedAt: new Date(),
+                                role: "user",
                             });
                             resolve();
                         } catch (error) {
@@ -71,6 +63,8 @@ export const useAuthService = () => {
                     }
                 );
             });
+
+            dispatch(setUser({ uid: user.uid, displayName, email }));
 
             dispatch(setLoading(false));
         } catch (error) {
@@ -83,6 +77,12 @@ export const useAuthService = () => {
         try {
             dispatch(setLoading(true));
             await signInWithEmailAndPassword(auth, email, password);
+
+            const user = auth.currentUser;
+
+            dispatch(
+                setUser({ uid: user.uid, displayName: user.displayName, email })
+            );
             dispatch(setLoading(false));
         } catch (error) {
             dispatch(setLoading(false));
@@ -122,10 +122,7 @@ export const useAuthService = () => {
             }
 
             if (resume) {
-                const storageRef = ref(
-                    storage,
-                    `resumes/${auth.currentUser.uid}`
-                );
+                const storageRef = ref(storage, `resumes/${user.uid}`);
                 const userDocRef = doc(db, "resumes", auth.currentUser.uid);
                 const userDoc = await getDoc(userDocRef);
                 const resumeUrl = userDoc.data()?.resume;
@@ -146,10 +143,8 @@ export const useAuthService = () => {
                                 (snapshot.bytesTransferred /
                                     snapshot.totalBytes) *
                                 100;
-                            console.log("Upload is " + progress + "% done");
                         },
                         (error) => {
-                            console.error(error.code);
                             reject(new Error(error.code));
                         },
                         async () => {

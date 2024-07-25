@@ -11,10 +11,9 @@ import {
 import { useNavigate, Link } from "react-router-dom";
 import * as yup from "yup";
 import { Form as FormikForm, Formik, Field, ErrorMessage } from "formik";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useAuthService } from "./useAuthService";
 import { selectError, setError } from "../../redux/authSlice";
-import { useSelector } from "react-redux";
 
 const registrationSchema = yup.object().shape({
     displayName: yup.string().required(),

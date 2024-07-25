@@ -1,26 +1,11 @@
 import React from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
-import { selectUser, setLoading } from "../../redux/authSlice";
-import { auth } from "../../firebase";
-import { signOut } from "firebase/auth";
-import { logout } from "../../redux/authSlice";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/authSlice";
 
 const NavigationBar = () => {
-    const dispatch = useDispatch();
     const user = useSelector(selectUser);
-
-    const handleLogout = async () => {
-        try {
-            dispatch(setLoading(true));
-            dispatch(logout());
-            await signOut(auth);
-            dispatch(setLoading(false));
-        } catch (error) {
-            console.log(error);
-        }
-    };
 
     return (
         <Navbar bg="light" expand="lg">
@@ -40,7 +25,14 @@ const NavigationBar = () => {
                 </Nav>
                 <Nav>
                     {user ? (
-                        <Nav.Link onClick={handleLogout}>Sign Out</Nav.Link>
+                        <>
+                            <LinkContainer to="/openAI/generate">
+                                <Nav.Link>Generate Cover Letter</Nav.Link>
+                            </LinkContainer>
+                            <LinkContainer to="/auth/profile">
+                                <Nav.Link>Profile</Nav.Link>
+                            </LinkContainer>
+                        </>
                     ) : (
                         <>
                             <LinkContainer to="/auth/login">
