@@ -4,6 +4,7 @@ const initialState = {
     user: null,
     loading: false,
     error: null,
+    isResumeUploaded: false,
 };
 
 export const authSlice = createSlice({
@@ -18,10 +19,15 @@ export const authSlice = createSlice({
         },
         logout: (state) => {
             state.user = null;
+            state.isResumeUploaded = false;
         },
 
         setError: (state, action) => {
             state.error = action.payload;
+        },
+
+        setIsResumeUploaded: (state, action) => {
+            state.isResumeUploaded = action.payload;
         },
     },
 });
@@ -29,4 +35,6 @@ export const authSlice = createSlice({
 export const selectUser = (state) => state.auth.user;
 export const selectLoading = (state) => state.auth.loading;
 export const selectError = (state) => state.auth.error;
-export const { setUser, setLoading, logout, setError } = authSlice.actions;
+export const selectIsResumeUploaded = (state) => state.auth.isResumeUploaded;
+export const { setUser, setLoading, logout, setError, setIsResumeUploaded } =
+    authSlice.actions;

@@ -3,7 +3,6 @@ import { Login } from "./Login";
 import { Profile } from "./Profile";
 import { PrivateRoute } from "./PrivateRoute";
 import { Routes, Route } from "react-router-dom";
-import { UpdateProfile } from "./UpdateProfile";
 import React from "react";
 
 export function Auth() {
@@ -16,15 +15,6 @@ export function Auth() {
                 element={
                     <PrivateRoute>
                         <Profile />
-                    </PrivateRoute>
-                }
-            />
-            <Route
-                path="update-profile"
-                element={
-                    <PrivateRoute>
-                        {" "}
-                        <UpdateProfile />{" "}
                     </PrivateRoute>
                 }
             />

@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../redux/authSlice";
+import { AuthContext } from "../auth/AuthContext";
 
 const NavigationBar = () => {
-    const user = useSelector(selectUser);
+    const { currentUser: user } = useContext(AuthContext);
 
     return (
         <Navbar bg="light" expand="lg">
@@ -24,7 +23,7 @@ const NavigationBar = () => {
                     </Nav.Link>
                 </Nav>
                 <Nav>
-                    {user ? (
+                    {user.user ? (
                         <>
                             <LinkContainer to="/openAI/generate">
                                 <Nav.Link>Generate Cover Letter</Nav.Link>

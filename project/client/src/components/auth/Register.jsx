@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import {
     Container,
     Row,
@@ -8,15 +8,13 @@ import {
     Stack,
     Alert,
 } from "react-bootstrap";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import * as yup from "yup";
 import { Form as FormikForm, Formik, Field, ErrorMessage } from "formik";
-import { useDispatch, useSelector } from "react-redux";
-import { useAuthService } from "./useAuthService";
-import { selectError, setError } from "../../redux/authSlice";
+import { AuthContext } from "../auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const registrationSchema = yup.object().shape({
-    displayName: yup.string().required(),
     email: yup
         .string()
         .email("Invalid Email Format")
@@ -33,34 +31,15 @@ const registrationSchema = yup.object().shape({
 
 export function Register() {
     const navigate = useNavigate();
-    const { registerUser } = useAuthService();
-    const error = useSelector(selectError);
-    const dispatch = useDispatch();
+    const { authError, setAuthError, register } = useContext(AuthContext);
 
-    const handleSubmit = async ({ email, password, resume, displayName }) => {
+    const handleSubmit = async ({ email, password, resume }) => {
         try {
-            await registerUser({ email, password, resume, displayName });
-            navigate("/auth/profile");
+            await register(email, password, resume);
         } catch (error) {
-            dispatch(setError(error.message));
+            console.error(error);
         }
     };
-
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                dispatch(setError(null));
-            }, 5000); // 5 seconds
-
-            return () => clearTimeout(timer);
-        }
-    }, [error, dispatch]);
-
-    useEffect(() => {
-        return () => {
-            dispatch(setError(null));
-        };
-    }, [dispatch]);
 
     return (
         <Container>
@@ -74,13 +53,13 @@ export function Register() {
                 </Row>
             </Container>
 
-            {error && (
+            {authError && (
                 <Alert
                     variant="danger"
-                    onClose={() => dispatch(setError(null))}
+                    onClose={() => setAuthError("")}
                     dismissible
                 >
-                    {error}
+                    {authError}
                 </Alert>
             )}
 
@@ -91,29 +70,10 @@ export function Register() {
                     email: "",
                     password: "",
                     resume: null,
-                    displayName: "",
                 }}
             >
                 {({ setFieldValue, errors }) => (
                     <FormikForm>
-                        <Form.Group
-                            className="mb-3"
-                            controlId="formDisplayName"
-                        >
-                            <Form.Label>Display Name</Form.Label>
-                            <Field
-                                type="string"
-                                name="displayName"
-                                placeholder="Enter display name"
-                                as={Form.Control}
-                            />
-                            <ErrorMessage
-                                name="displayName"
-                                component="div"
-                                className="text-danger"
-                            />
-                        </Form.Group>
-
                         <Form.Group className="mb-3" controlId="formEmail">
                             <Form.Label>Email address</Form.Label>
                             <Field
