@@ -1,0 +1,144 @@
+[debug] [2024-08-19T03:24:36.379Z] ----------------------------------------------------------------------
+[debug] [2024-08-19T03:24:36.382Z] Command:       /home/dsoto/.nvm/versions/node/v20.11.1/bin/node /home/dsoto/.nvm/versions/node/v20.11.1/bin/firebase emulators:start
+[debug] [2024-08-19T03:24:36.383Z] CLI Version:   13.13.3
+[debug] [2024-08-19T03:24:36.383Z] Platform:      linux
+[debug] [2024-08-19T03:24:36.383Z] Node Version:  v20.11.1
+[debug] [2024-08-19T03:24:36.383Z] Time:          Sun Aug 18 2024 20:24:36 GMT-0700 (Pacific Daylight Time)
+[debug] [2024-08-19T03:24:36.383Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-08-19T03:24:36.524Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-08-19T03:24:36.524Z] > authorizing via signed-in user (sotodaniel531@gmail.com)
+[debug] [2024-08-19T03:24:36.688Z] openjdk version "17.0.11" 2024-04-16
+OpenJDK Runtime Environment (build 17.0.11+9-Ubuntu-122.04.1)
+
+[debug] [2024-08-19T03:24:36.689Z] OpenJDK 64-Bit Server VM (build 17.0.11+9-Ubuntu-122.04.1, mixed mode, sharing)
+
+[debug] [2024-08-19T03:24:36.695Z] Parsed Java major version: 17
+[info] i  emulators: Starting emulators: auth, functions, firestore, storage {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, functions, firestore, storage"}}
+[debug] [2024-08-19T03:24:36.701Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"storage":[{"address":"127.0.0.1","family":"IPv4","port":9199}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2024-08-19T03:24:36.706Z] [hub] writing locator at /tmp/hub-covergenai-1b4e3.json
+[debug] [2024-08-19T03:24:36.712Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"storage":[{"address":"127.0.0.1","family":"IPv4","port":9199}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] ⚠  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: database, hosting, pubsub, dataconnect {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mdatabase, hosting, pubsub, dataconnect\u001b[22m"}}
+[debug] [2024-08-19T03:24:36.721Z] defaultcredentials: writing to file /home/dsoto/.config/firebase/sotodaniel531_gmail_com_application_default_credentials.json
+[debug] [2024-08-19T03:24:36.723Z] Setting GAC to /home/dsoto/.config/firebase/sotodaniel531_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to /home/dsoto/.config/firebase/sotodaniel531_gmail_com_application_default_credentials.json"}}
+[debug] [2024-08-19T03:24:36.724Z] > refreshing access token with scopes: []
+[debug] [2024-08-19T03:24:36.726Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2024-08-19T03:24:36.727Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-08-19T03:24:36.916Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2024-08-19T03:24:36.917Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-08-19T03:24:36.946Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/covergenai-1b4e3/adminSdkConfig [none]
+[debug] [2024-08-19T03:24:37.612Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/covergenai-1b4e3/adminSdkConfig 200
+[debug] [2024-08-19T03:24:37.612Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/covergenai-1b4e3/adminSdkConfig {"projectId":"covergenai-1b4e3","storageBucket":"covergenai-1b4e3.appspot.com","locationId":"us-central"}
+[debug] [2024-08-19T03:24:37.648Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2024-08-19T03:24:37.648Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
+[debug] [2024-08-19T03:24:37.648Z] Starting Firestore Emulator with command {"binary":"java","args":["-Djava.net.preferIPv4Stack=true","-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","/home/dsoto/.cache/firebase/emulators/cloud-firestore-emulator-v1.19.7.jar","--host","127.0.0.1","--port",8080,"--websocket_port",9150,"--project_id","covergenai-1b4e3","--rules","/home/dsoto/cover-letter-generator/project/firestore.rules","--single_project_mode",true,"--functions_emulator","127.0.0.1:5001"],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false,"shell":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Djava.net.preferIPv4Stack=true\",\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"/home/dsoto/.cache/firebase/emulators/cloud-firestore-emulator-v1.19.7.jar\",\"--host\",\"127.0.0.1\",\"--port\",8080,\"--websocket_port\",9150,\"--project_id\",\"covergenai-1b4e3\",\"--rules\",\"/home/dsoto/cover-letter-generator/project/firestore.rules\",\"--single_project_mode\",true,\"--functions_emulator\",\"127.0.0.1:5001\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false,\"shell\":false}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[debug] [2024-08-19T03:24:39.427Z] Aug 18, 2024 8:24:39 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start
+INFO: Started WebSocket server on ws://127.0.0.1:9150
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Aug 18, 2024 8:24:39 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start\nINFO: Started WebSocket server on ws://127.0.0.1:9150\n"}}
+[debug] [2024-08-19T03:24:39.538Z] API endpoint: http://127.0.0.1:8080
+If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+ {"metadata":{"emulator":{"name":"firestore"},"message":"API endpoint: http://127.0.0.1:8080\nIf you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:\n"}}
+[debug] [2024-08-19T03:24:39.539Z] 
+   export FIRESTORE_EMULATOR_HOST=127.0.0.1:8080
+
+If you are running a Firestore in Datastore Mode project, run:
+
+   export DATASTORE_EMULATOR_HOST=127.0.0.1:8080
+
+Note: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.
+Dev App Server is now running.
+
+ {"metadata":{"emulator":{"name":"firestore"},"message":"\n   export FIRESTORE_EMULATOR_HOST=127.0.0.1:8080\n\nIf you are running a Firestore in Datastore Mode project, run:\n\n   export DATASTORE_EMULATOR_HOST=127.0.0.1:8080\n\nNote: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.\nDev App Server is now running.\n\n"}}
+[info] ✔  firestore: Firestore Emulator UI websocket is running on 9150. {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator UI websocket is running on 9150."}}
+[debug] [2024-08-19T03:24:50.068Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"storage"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2024-08-19T03:24:51.200Z] Temp file directory for storage emulator: /tmp/firebase/storage/blobs {"metadata":{"emulator":{"name":"storage"},"message":"Temp file directory for storage emulator: /tmp/firebase/storage/blobs"}}
+[debug] [2024-08-19T03:24:51.217Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2024-08-19T03:24:51.217Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2024-08-19T03:24:51.217Z] Starting Emulator UI with command {"binary":"node","args":["/home/dsoto/.cache/firebase/emulators/ui-v1.12.1/server/server.mjs"],"optionalArgs":[],"joinArgs":false,"shell":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"/home/dsoto/.cache/firebase/emulators/ui-v1.12.1/server/server.mjs\"],\"optionalArgs\":[],\"joinArgs\":false,\"shell\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2024-08-19T03:24:51.369Z] Web / API server started at 127.0.0.1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at 127.0.0.1:4000\n"}}
+[info] i  functions: Watching "/home/dsoto/cover-letter-generator/project/functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"/home/dsoto/cover-letter-generator/project/functions\" for Cloud Functions..."}}
+[debug] [2024-08-19T03:24:51.444Z] Validating nodejs source
+[debug] [2024-08-19T03:24:52.173Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^12.1.0",
+    "firebase-functions": "^5.0.0"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-08-19T03:24:52.174Z] Building nodejs source
+[debug] [2024-08-19T03:24:52.175Z] Failed to find version of module node: reached end of search path /home/dsoto/cover-letter-generator/project/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2024-08-19T03:24:52.180Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-08-19T03:24:52.188Z] Found firebase-functions binary at '/home/dsoto/cover-letter-generator/project/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8817
+
+[debug] [2024-08-19T03:24:52.509Z] Got response from /__/functions.yaml {"endpoints":{},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] ✔  functions: Loaded functions definitions from source: . {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: ."}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┬─────────────────────────────────┐
+│ Emulator       │ Host:Port      │ View in Emulator UI             │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Authentication │ 127.0.0.1:9099 │ http://127.0.0.1:4000/auth      │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Functions      │ 127.0.0.1:5001 │ http://127.0.0.1:4000/functions │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Firestore      │ 127.0.0.1:8080 │ http://127.0.0.1:4000/firestore │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Storage        │ 127.0.0.1:9199 │ http://127.0.0.1:4000/storage   │
+└────────────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at 127.0.0.1:4400
+  Other reserved ports: 4500, 9150
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2024-08-19T03:25:03.858Z] Aug 18, 2024 8:25:03 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel
+INFO: Connected to new websocket client
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Aug 18, 2024 8:25:03 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel\nINFO: Connected to new websocket client\n"}}
+[debug] [2024-08-19T03:26:38.791Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast [none]
+[debug] [2024-08-19T03:26:38.792Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast {"eventId":"9978c933-9aea-4d93-a795-f0b9ec044516","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/covergenai-1b4e3","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-08-19T03:26:38.791Z","data":{"uid":"V7yXCcwRdZslkQIGTIuttufLnvFh","email":"sotodaniel531@gmail.com","emailVerified":false,"metadata":{"creationTime":"2024-08-19T03:26:38.789Z","lastSignInTime":"2024-08-19T03:26:38.789Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"sotodaniel531@gmail.com","federatedId":"sotodaniel531@gmail.com","rawId":"sotodaniel531@gmail.com"}]}}
+[debug] [2024-08-19T03:26:38.803Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast 200
+[debug] [2024-08-19T03:26:38.803Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-08-19T03:26:39.468Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast [none]
+[debug] [2024-08-19T03:26:39.469Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast {"eventId":"1724037999468","timestamp":"2024-08-19T03:26:39.468Z","eventType":"google.storage.object.finalize","resource":{"service":"storage.googleapis.com","name":"projects/_/buckets/covergenai-1b4e3.appspot.com/objects/resumes/sotodaniel531@gmail.com.pdf","type":"storage#object"},"data":{"kind":"storage#object","name":"resumes/sotodaniel531@gmail.com.pdf","bucket":"covergenai-1b4e3.appspot.com","generation":"1724037999193","metageneration":"1","contentType":"application/pdf","timeCreated":"2024-08-19T03:26:39.193Z","updated":"2024-08-19T03:26:39.193Z","storageClass":"STANDARD","size":"98820","md5Hash":"Vn0JewfGTFg/XXrZLZ0oFA==","etag":"z11gFavqpeyCTu7cGiLrO/VED9Q","metadata":{"firebaseStorageDownloadTokens":"830fb49a-4917-46e4-8fd2-866afe8e4f6b"},"crc32c":"lkka0Q==","timeStorageClassUpdated":"2024-08-19T03:26:39.193Z","id":"covergenai-1b4e3.appspot.com/resumes/sotodaniel531@gmail.com.pdf/1724037999193","selfLink":"http://127.0.0.1:9199/storage/v1/b/covergenai-1b4e3.appspot.com/o/resumes%2Fsotodaniel531%40gmail.com.pdf","mediaLink":"http://127.0.0.1:9199/download/storage/v1/b/covergenai-1b4e3.appspot.com/o/resumes%2Fsotodaniel531%40gmail.com.pdf?generation=1724037999193&alt=media"}}
+[debug] [2024-08-19T03:26:39.473Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast 200
+[debug] [2024-08-19T03:26:39.473Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-08-19T03:26:39.475Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast [none]
+[debug] [2024-08-19T03:26:39.475Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast {"specversion":"1.0","id":"8e034244-d159-4890-be44-ca9cc237e3a3","type":"google.cloud.storage.object.v1.finalized","source":"//storage.googleapis.com/projects/_/buckets/covergenai-1b4e3.appspot.com/objects/resumes/sotodaniel531@gmail.com.pdf","time":"2024-08-19T03:26:39.193Z","data":{"kind":"storage#object","name":"resumes/sotodaniel531@gmail.com.pdf","bucket":"covergenai-1b4e3.appspot.com","generation":"1724037999193","metageneration":"1","contentType":"application/pdf","timeCreated":"2024-08-19T03:26:39.193Z","updated":"2024-08-19T03:26:39.193Z","storageClass":"STANDARD","size":"98820","md5Hash":"Vn0JewfGTFg/XXrZLZ0oFA==","etag":"z11gFavqpeyCTu7cGiLrO/VED9Q","metadata":{"firebaseStorageDownloadTokens":"830fb49a-4917-46e4-8fd2-866afe8e4f6b"},"crc32c":"lkka0Q==","timeStorageClassUpdated":"2024-08-19T03:26:39.193Z","id":"covergenai-1b4e3.appspot.com/resumes/sotodaniel531@gmail.com.pdf/1724037999193","selfLink":"http://127.0.0.1:9199/storage/v1/b/covergenai-1b4e3.appspot.com/o/resumes%2Fsotodaniel531%40gmail.com.pdf","mediaLink":"http://127.0.0.1:9199/download/storage/v1/b/covergenai-1b4e3.appspot.com/o/resumes%2Fsotodaniel531%40gmail.com.pdf?generation=1724037999193&alt=media"}}
+[debug] [2024-08-19T03:26:39.479Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast 200
+[debug] [2024-08-19T03:26:39.479Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-08-19T03:37:51.519Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast [none]
+[debug] [2024-08-19T03:37:51.520Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast {"eventId":"1a51e7a1-5ffc-4cee-987a-47efd0bd19f3","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/covergenai-1b4e3","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-08-19T03:37:51.518Z","data":{"uid":"Dhz0IElVoZwSpjdXZEBQDdzBnvsH","email":"test@gmail.com","emailVerified":false,"metadata":{"creationTime":"2024-08-19T03:37:51.518Z","lastSignInTime":"2024-08-19T03:37:51.518Z"},"customClaims":{},"providerData":[{"providerId":"password","email":"test@gmail.com","federatedId":"test@gmail.com","rawId":"test@gmail.com"}]}}
+[debug] [2024-08-19T03:37:51.527Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast 200
+[debug] [2024-08-19T03:37:51.534Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-08-19T03:37:51.612Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast [none]
+[debug] [2024-08-19T03:37:51.612Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast {"eventId":"1724038671612","timestamp":"2024-08-19T03:37:51.612Z","eventType":"google.storage.object.finalize","resource":{"service":"storage.googleapis.com","name":"projects/_/buckets/covergenai-1b4e3.appspot.com/objects/resumes/test@gmail.com.pdf","type":"storage#object"},"data":{"kind":"storage#object","name":"resumes/test@gmail.com.pdf","bucket":"covergenai-1b4e3.appspot.com","generation":"1724038671605","metageneration":"1","contentType":"application/pdf","timeCreated":"2024-08-19T03:37:51.605Z","updated":"2024-08-19T03:37:51.605Z","storageClass":"STANDARD","size":"90689","md5Hash":"EaSVRabY3vwGmZhmt05j0w==","etag":"OER+Zcy4KQ5DNJOfgkUyeVNDmWA","metadata":{"firebaseStorageDownloadTokens":"24f8a009-21d1-4b90-bb3b-43814b6cbc6a"},"crc32c":"MQMPOg==","timeStorageClassUpdated":"2024-08-19T03:37:51.605Z","id":"covergenai-1b4e3.appspot.com/resumes/test@gmail.com.pdf/1724038671605","selfLink":"http://127.0.0.1:9199/storage/v1/b/covergenai-1b4e3.appspot.com/o/resumes%2Ftest%40gmail.com.pdf","mediaLink":"http://127.0.0.1:9199/download/storage/v1/b/covergenai-1b4e3.appspot.com/o/resumes%2Ftest%40gmail.com.pdf?generation=1724038671605&alt=media"}}
+[debug] [2024-08-19T03:37:51.620Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast 200
+[debug] [2024-08-19T03:37:51.620Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-08-19T03:37:51.622Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast [none]
+[debug] [2024-08-19T03:37:51.623Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast {"specversion":"1.0","id":"2275a2d9-cbf6-4cb0-8edb-f0c4a4ccdef3","type":"google.cloud.storage.object.v1.finalized","source":"//storage.googleapis.com/projects/_/buckets/covergenai-1b4e3.appspot.com/objects/resumes/test@gmail.com.pdf","time":"2024-08-19T03:37:51.605Z","data":{"kind":"storage#object","name":"resumes/test@gmail.com.pdf","bucket":"covergenai-1b4e3.appspot.com","generation":"1724038671605","metageneration":"1","contentType":"application/pdf","timeCreated":"2024-08-19T03:37:51.605Z","updated":"2024-08-19T03:37:51.605Z","storageClass":"STANDARD","size":"90689","md5Hash":"EaSVRabY3vwGmZhmt05j0w==","etag":"OER+Zcy4KQ5DNJOfgkUyeVNDmWA","metadata":{"firebaseStorageDownloadTokens":"24f8a009-21d1-4b90-bb3b-43814b6cbc6a"},"crc32c":"MQMPOg==","timeStorageClassUpdated":"2024-08-19T03:37:51.605Z","id":"covergenai-1b4e3.appspot.com/resumes/test@gmail.com.pdf/1724038671605","selfLink":"http://127.0.0.1:9199/storage/v1/b/covergenai-1b4e3.appspot.com/o/resumes%2Ftest%40gmail.com.pdf","mediaLink":"http://127.0.0.1:9199/download/storage/v1/b/covergenai-1b4e3.appspot.com/o/resumes%2Ftest%40gmail.com.pdf?generation=1724038671605&alt=media"}}
+[debug] [2024-08-19T03:37:51.629Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast 200
+[debug] [2024-08-19T03:37:51.629Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/covergenai-1b4e3/trigger_multicast {"status":"multicast_acknowledged"}

@@ -9,9 +9,9 @@ export function Profile() {
     const {
         currentUser: user,
         logout,
-        authMethod,
         authError,
         setAuthError,
+        resumeExists,
     } = useContext(AuthContext);
 
     const fetchResume = useCallback(async () => {
@@ -20,10 +20,8 @@ export function Profile() {
     }, []);
 
     useEffect(() => {
-        if (authMethod === "login" && user.user) {
-            fetchResume();
-        }
-    }, [authMethod, user.user]);
+        fetchResume();
+    }, []);
 
     const handleLogout = async () => {
         try {

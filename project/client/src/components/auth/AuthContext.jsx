@@ -5,6 +5,7 @@ import {
     createUserWithEmailAndPassword,
     sendEmailVerification,
     signOut,
+    browserSessionPersistence,
 } from "firebase/auth";
 
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -16,11 +17,6 @@ const userReducer = (state, action) => {
     const { user, type } = action;
 
     switch (type) {
-        case "REGISTER":
-            return {
-                ...state,
-                user: user,
-            };
         case "LOGIN":
             return {
                 ...state,
@@ -42,40 +38,35 @@ export const AuthProvider = ({ children }) => {
     });
     const [loading, setLoading] = useState(false);
     const [authError, setAuthError] = useState("");
-    const [authMethod, setAuthMethod] = useState("");
+    const [resumeExists, setResumeExists] = useState(false);
 
     const navigate = useNavigate();
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             if (user) {
-                console.log(authMethod);
-                console.log("user logged in", currentUser.user);
+                setCurrentUser({
+                    type: "LOGIN",
+                    user: user,
+                });
+                navigate("/auth/profile");
             } else {
                 console.log("user logged out or not signed in");
             }
         });
 
         return unsubscribe;
-    }, [currentUser.user, authMethod]);
+    }, [resumeExists]);
 
     const login = async (email, password) => {
         try {
             setLoading(true);
-            setAuthMethod("login");
 
-            const user = await signInWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
+            await auth.setPersistence(browserSessionPersistence);
 
-            setCurrentUser({
-                type: "LOGIN",
-                user: user.user,
-            });
+            setResumeExists(true);
 
-            navigate("/auth/profile");
+            await signInWithEmailAndPassword(auth, email, password);
         } catch (error) {
             setAuthError(error.message);
         } finally {
@@ -110,7 +101,6 @@ export const AuthProvider = ({ children }) => {
     const register = async (email, password, resume) => {
         try {
             setLoading(true);
-            setAuthMethod("register");
             const user = await createUserWithEmailAndPassword(
                 auth,
                 email,
@@ -124,14 +114,9 @@ export const AuthProvider = ({ children }) => {
                 contentType: "application/pdf",
             });
 
-            const downloadURL = await uploadResume(uploadTask);
+            await uploadResume(uploadTask);
 
-            setCurrentUser({
-                type: "REGISTER",
-                user: user.user,
-            });
-            setAuthMethod("login");
-            navigate("/auth/profile");
+            setResumeExists(true);
         } catch (error) {
             setAuthError(error.message);
         } finally {
@@ -142,7 +127,7 @@ export const AuthProvider = ({ children }) => {
     const logout = async () => {
         try {
             setLoading(true);
-            setAuthMethod("");
+            setResumeExists(false);
             await signOut(auth);
             setCurrentUser({
                 type: "LOGOUT",
@@ -165,8 +150,8 @@ export const AuthProvider = ({ children }) => {
                 loading,
                 authError,
                 setAuthError,
-                authMethod,
-                setAuthMethod,
+                resumeExists,
+                setResumeExists,
             }}
         >
             {children}

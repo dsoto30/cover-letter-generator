@@ -11,3 +11,4 @@ package-lock.json
 package.json
 .firebaserc
 firebase.json
+firestore-debug.log
