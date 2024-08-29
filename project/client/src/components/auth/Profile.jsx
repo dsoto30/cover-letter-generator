@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useCallback, useState } from "react";
 import { Container, Card, Button, Alert, Stack } from "react-bootstrap";
 
-import { getDownloadURLFromStorage, uploadResume } from "./storageHelper";
+import { getDownloadURLFromStorage } from "./storageHelper";
 import { AuthContext } from "../auth/AuthContext";
 
 export function Profile() {

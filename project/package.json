@@ -4,19 +4,30 @@
   "main": "index.js",
   "scripts": {
     "install": "cd client && npm install",
-    "client": "cd client && npm start"
+    "client": "cd client && npm start",
+    "clean": "find . -name '*.log' -type f -delete"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "16": "^0.0.2",
+    "@react-pdf/renderer": "^3.4.4",
     "@reduxjs/toolkit": "^2.2.6",
     "bootstrap": "^5.3.3",
+    "firebase": "^10.13.0",
+    "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^4.5.136",
     "react-icons": "^5.2.1",
+    "react-pdf": "^9.1.0",
     "react-redux": "^9.1.2",
+    "react-router-bootstrap": "^0.26.3",
     "react-router-dom": "^6.25.0",
     "yup": "^1.4.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
+    "rimraf": "^6.0.1"
+  },
   "description": ""
 }

@@ -1,19 +1,43 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * const {onCall} = require("firebase-functions/v2/https");
- * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+const functions = require("firebase-functions");
+const express = require("express");
+const { OpenAI } = require("openai");
+const { config } = require("dotenv");
+config();
+const openAI = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-const {onRequest} = require("firebase-functions/v2/https");
-const logger = require("firebase-functions/logger");
+const app = express();
 
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
+const cors = require("cors");
 
-// exports.helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+app.use(cors());
+
+app.use(express.json());
+
+app.post("/getOpenAIResponse", async (req, res) => {
+    try {
+        const prompt = req.body.prompt;
+
+        if (!prompt) {
+            res.status(400).send("Missing prompt");
+            return;
+        }
+        console.log(prompt);
+        const response = await openAI.chat.completions.create({
+            model: "gpt-3.5-turbo",
+            messages: [
+                {
+                    role: "system",
+                    content:
+                        "You are a helpful job recruiter helping job seekers to create personalized cover letters for their desired job",
+                },
+                { role: "user", content: prompt },
+            ],
+            max_tokens: 1000,
+        });
+        return res.status(200).send(response.choices[0].message.content);
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+exports.api = functions.https.onRequest(app);

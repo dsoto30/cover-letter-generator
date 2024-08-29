@@ -6,9 +6,10 @@ import { Auth } from "../auth/Auth";
 import Loading from "./Loading";
 import React, { useContext } from "react";
 import { AuthContext } from "../auth/AuthContext";
+import OpenAiRoute from "../OpenAI/OpenAIRoute";
 
 function AppLayout() {
-    const { loading, currentUser } = useContext(AuthContext);
+    const { loading } = useContext(AuthContext);
 
     if (loading) {
         return <Loading />;
@@ -20,6 +21,7 @@ function AppLayout() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/auth/*" element={<Auth />} />
+                <Route path="/openAI/*" element={<OpenAiRoute />} />
                 <Route path="*" element={<Error />} />
             </Routes>
         </>
