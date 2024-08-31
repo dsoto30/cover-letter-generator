@@ -3,20 +3,22 @@ import { Container, Card, Button, Alert, Stack } from "react-bootstrap";
 
 import { getDownloadURLFromStorage } from "./storageHelper";
 import { AuthContext } from "../auth/AuthContext";
-
+import Loading from "../layout/Loading";
 export function Profile() {
     const [url, setUrl] = useState("");
+    const [loading, setLoading] = useState(false);
     const {
         currentUser: user,
         logout,
         authError,
         setAuthError,
-        resumeExists,
     } = useContext(AuthContext);
 
     const fetchResume = useCallback(async () => {
+        setLoading(true);
         const url = await getDownloadURLFromStorage(user.user.email);
         setUrl(url);
+        setLoading(false);
     }, []);
 
     useEffect(() => {
@@ -30,6 +32,10 @@ export function Profile() {
             console.error(error);
         }
     };
+
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <Container>

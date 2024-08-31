@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useReducer } from "react";
-import { auth, storage } from "../../firebase";
+import { auth } from "../../firebase";
 import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
@@ -8,8 +8,9 @@ import {
     browserSessionPersistence,
 } from "firebase/auth";
 
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
+
+import { uploadResume } from "./storageHelper";
 
 export const AuthContext = createContext(null);
 
@@ -38,7 +39,6 @@ export const AuthProvider = ({ children }) => {
     });
     const [loading, setLoading] = useState(false);
     const [authError, setAuthError] = useState("");
-    const [resumeExists, setResumeExists] = useState(false);
 
     const navigate = useNavigate();
 
@@ -56,15 +56,13 @@ export const AuthProvider = ({ children }) => {
         });
 
         return unsubscribe;
-    }, [resumeExists]);
+    }, []);
 
     const login = async (email, password) => {
         try {
             setLoading(true);
 
             await auth.setPersistence(browserSessionPersistence);
-
-            setResumeExists(true);
 
             await signInWithEmailAndPassword(auth, email, password);
         } catch (error) {
@@ -74,49 +72,14 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const uploadResume = async (uploadTask) => {
-        try {
-            const downloadURL = await new Promise((resolve, reject) => {
-                uploadTask.on(
-                    "state_changed",
-                    (snapshot) => {},
-                    (error) => {
-                        reject(error);
-                    },
-                    () => {
-                        getDownloadURL(uploadTask.snapshot.ref).then(
-                            (downloadURL) => {
-                                resolve(downloadURL);
-                            }
-                        );
-                    }
-                );
-            });
-            return downloadURL;
-        } catch (error) {
-            setAuthError(error.message);
-        }
-    };
-
     const register = async (email, password, resume) => {
         try {
             setLoading(true);
-            const user = await createUserWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
+            await createUserWithEmailAndPassword(auth, email, password);
+
+            await uploadResume(email, resume);
 
             //await sendEmailVerification(auth.currentUser);
-
-            const storageRef = ref(storage, `resumes/${email}.pdf`);
-            const uploadTask = uploadBytesResumable(storageRef, resume, {
-                contentType: "application/pdf",
-            });
-
-            await uploadResume(uploadTask);
-
-            setResumeExists(true);
         } catch (error) {
             setAuthError(error.message);
         } finally {
@@ -127,7 +90,6 @@ export const AuthProvider = ({ children }) => {
     const logout = async () => {
         try {
             setLoading(true);
-            setResumeExists(false);
             await signOut(auth);
             setCurrentUser({
                 type: "LOGOUT",
@@ -150,8 +112,6 @@ export const AuthProvider = ({ children }) => {
                 loading,
                 authError,
                 setAuthError,
-                resumeExists,
-                setResumeExists,
             }}
         >
             {children}

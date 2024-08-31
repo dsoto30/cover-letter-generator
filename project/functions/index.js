@@ -34,7 +34,9 @@ app.post("/getOpenAIResponse", async (req, res) => {
             ],
             max_tokens: 1000,
         });
-        return res.status(200).send(response.choices[0].message.content);
+        return res.status(200).send({
+            response: response.choices[0].message.content,
+        });
     } catch (error) {
         console.error(error);
     }

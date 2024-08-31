@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 import * as yup from "yup";
 import { Form as FormikForm, Formik, Field, ErrorMessage } from "formik";
 import { AuthContext } from "../auth/AuthContext";
-import { useNavigate } from "react-router-dom";
 
 const registrationSchema = yup.object().shape({
     email: yup
@@ -30,7 +29,6 @@ const registrationSchema = yup.object().shape({
 });
 
 export function Register() {
-    const navigate = useNavigate();
     const { authError, setAuthError, register } = useContext(AuthContext);
 
     const handleSubmit = async ({ email, password, resume }) => {

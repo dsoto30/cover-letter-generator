@@ -12,7 +12,7 @@ export async function getDownloadURLFromStorage(email) {
     }
 }
 
-export async function uploadResume({ email, resume }) {
+export async function uploadResume(email, resume) {
     try {
         const storageRef = ref(storage, `resumes/${email}.pdf`);
         const uploadTask = uploadBytesResumable(storageRef, resume, {

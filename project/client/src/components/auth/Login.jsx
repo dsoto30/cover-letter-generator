@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 import * as yup from "yup";
 import { Form as FormikForm, Formik, Field, ErrorMessage } from "formik";
 import { AuthContext } from "../auth/AuthContext";
-import { useNavigate } from "react-router-dom";
 
 const loginSchema = yup.object().shape({
     email: yup
@@ -30,6 +29,7 @@ const loginSchema = yup.object().shape({
 
 export function Login() {
     const { login, authError, setAuthError } = useContext(AuthContext);
+
     const handleSubmit = async ({ email, password }) => {
         try {
             await login(email, password);
