@@ -1,6 +1,5 @@
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-//import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
-import { auth, storage, db } from "../../firebase";
+import { auth, storage } from "../../firebase";
 
 export async function getDownloadURLFromStorage(email) {
     try {

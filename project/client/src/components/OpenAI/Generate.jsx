@@ -60,7 +60,7 @@ function Generate() {
         const prompt = `Please generate a Cover letter for the following jobt title: ${jobTitle} and for the job posting: ${jobPosting} and the following resume: ${text}, please include only the paragraph of the cover letter and nothing else.`;
 
         const response = await fetch(
-            "http://127.0.0.1:5001/covergenai-1b4e3/us-central1/api/getOpenAIResponse",
+            `${REACT_APP_FUNCTIONS_URL}/getOpenAIResponse`,
             {
                 method: "POST",
                 headers: {

@@ -21,7 +21,6 @@ app.post("/getOpenAIResponse", async (req, res) => {
             res.status(400).send("Missing prompt");
             return;
         }
-        console.log(prompt);
         const response = await openAI.chat.completions.create({
             model: "gpt-3.5-turbo",
             messages: [
