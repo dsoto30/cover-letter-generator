@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import {
     Container,
     Row,
@@ -8,12 +8,10 @@ import {
     Stack,
     Alert,
 } from "react-bootstrap";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import * as yup from "yup";
 import { Form as FormikForm, Formik, Field, ErrorMessage } from "formik";
-import { useAuthService } from "./useAuthService";
-import { useSelector, useDispatch } from "react-redux";
-import { selectError, setError } from "../../redux/authSlice";
+import { AuthContext } from "../auth/AuthContext";
 
 const loginSchema = yup.object().shape({
     email: yup
@@ -30,35 +28,15 @@ const loginSchema = yup.object().shape({
 });
 
 export function Login() {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const { loginUser } = useAuthService();
-    const error = useSelector(selectError);
+    const { login, authError, setAuthError } = useContext(AuthContext);
 
     const handleSubmit = async ({ email, password }) => {
         try {
-            await loginUser({ email, password });
-            navigate("/auth/profile");
+            await login(email, password);
         } catch (error) {
-            dispatch(setError(error.message));
+            console.error(error);
         }
     };
-
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                dispatch(setError(null));
-            }, 5000); // 5 seconds
-
-            return () => clearTimeout(timer);
-        }
-    }, [error, dispatch]);
-
-    useEffect(() => {
-        return () => {
-            dispatch(setError(null));
-        };
-    }, [dispatch]);
 
     return (
         <Container>
@@ -72,13 +50,13 @@ export function Login() {
                 </Row>
             </Container>
 
-            {error && (
+            {authError && (
                 <Alert
                     variant="danger"
-                    onClose={() => dispatch(setError(null))}
+                    onClose={() => setAuthError("")}
                     dismissible
                 >
-                    {error}
+                    {authError}
                 </Alert>
             )}
 

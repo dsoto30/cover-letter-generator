@@ -6,8 +6,11 @@ client/.env
 client/firebase.js
 client/src/firebase.js
 
+functions/.env
+
 node_modules
 package-lock.json
 package.json
 .firebaserc
 firebase.json
+firestore-debug.log

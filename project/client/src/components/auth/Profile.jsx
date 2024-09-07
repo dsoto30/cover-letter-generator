@@ -1,91 +1,74 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useContext, useCallback, useState } from "react";
 import { Container, Card, Button, Alert, Stack } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import {
-    selectUser,
-    selectError,
-    setError,
-    setLoading,
-} from "../../redux/authSlice";
-import { useAuthService } from "./useAuthService";
-import { useNavigate } from "react-router-dom";
-import { fetchResume } from "./fetchResume";
 
+import { getDownloadURLFromStorage } from "./storageHelper";
+import { AuthContext } from "../auth/AuthContext";
+import Loading from "../layout/Loading";
 export function Profile() {
-    const [resume, setResume] = useState(null);
-    const dispatch = useDispatch();
-    const currentUser = useSelector(selectUser);
-    const { logoutUser } = useAuthService();
-    const error = useSelector(selectError);
-    const navigate = useNavigate();
+    const [url, setUrl] = useState("");
+    const [loading, setLoading] = useState(false);
+    const {
+        currentUser: user,
+        logout,
+        authError,
+        setAuthError,
+    } = useContext(AuthContext);
+
+    const fetchResume = useCallback(async () => {
+        setLoading(true);
+        const url = await getDownloadURLFromStorage(user.user.email);
+        setUrl(url);
+        setLoading(false);
+    }, []);
 
     useEffect(() => {
-        const fetch = async () => {
-            try {
-                const resume = await fetchResume(currentUser.uid);
-                setResume(resume);
-            } catch (error) {
-                dispatch(setError(error.message));
-            }
-        };
-        fetch();
-    });
-
-    useEffect(() => {
-        return () => {
-            dispatch(setError(null));
-        };
-    }, [dispatch]);
+        fetchResume();
+    }, []);
 
     const handleLogout = async () => {
         try {
-            await logoutUser();
+            await logout();
         } catch (error) {
-            dispatch(setError(error.message));
+            console.error(error);
         }
     };
 
-    const update = () => {
-        navigate("../update-profile");
-    };
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <Container>
             <h1 className="my-4">Profile</h1>
-            {error && (
+            {authError && (
                 <Alert
                     variant="danger"
-                    onClose={() => dispatch(setError(null))}
+                    onClose={() => setAuthError("")}
                     dismissible
                 >
                     <Alert.Heading>Error</Alert.Heading>
-                    <p>{error}</p>
+                    <p>{authError}</p>
                 </Alert>
             )}
             <Card>
                 <Card.Body>
                     <Card.Title>
-                        Welcome, {currentUser?.displayName || "User"}!
+                        Welcome, {user.user?.displayName || "User"}!
                     </Card.Title>
                     <Card.Text>
-                        <strong>Email:</strong> {currentUser?.email}
+                        <strong>Email:</strong> {user.user?.email}
                     </Card.Text>
 
-                    {resume ? (
+                    {url ? (
                         <Card.Text>
                             <strong>Resume:</strong>{" "}
                             <a
-                                href={resume.resume}
+                                href={url}
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
                                 View Resume
                             </a>
-                            <br />
-                            <strong>Last updated:</strong>{" "}
-                            {new Date(
-                                resume.updatedAt.toDate()
-                            ).toLocaleString()}
                         </Card.Text>
                     ) : (
                         <Card.Text>No resume uploaded.</Card.Text>
@@ -97,10 +80,6 @@ export function Profile() {
                         <Button variant="primary" onClick={handleLogout}>
                             Logout
                         </Button>
-                        {/* 
-                        <Button variant="info" onClick={update}>
-                            Update Profile
-                        </Button>*/}
                     </Stack>
                 </Card.Body>
             </Card>

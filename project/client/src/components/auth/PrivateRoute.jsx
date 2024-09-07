@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../redux/authSlice";
+
+import { AuthContext } from "../auth/AuthContext";
 
 export function PrivateRoute({ children }) {
-    const user = useSelector(selectUser);
-    if (user) {
+    const { currentUser } = useContext(AuthContext);
+    if (currentUser.user) {
         return children;
     }
 
-    return <Navigate to={"/"} />;
+    return <Navigate to={"/auth/login"} />;
 }
