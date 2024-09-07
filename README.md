@@ -6,11 +6,11 @@ Author: Daniel Everardo Soto
 
 **Functional Description**
 
-During the job hunting process while dealing with job searching, resume reviews and interview prep sessions one of the tedious things to deal with is writing cover letters for a job posting . Many people have trouble creating cover letters by scratch because we need to structure the letter based on the position/company we are applying to. These postings can be different roles, skills and experience levels. Users will create/sign in through google and create/edit a profile. This profile will consist with user information, resume, and ability to connect their LinkedIn or Github accounts to provide more information. We will use the OpenAI API to generate cover letters by feeding the model their resume and any other relevant information gathered from their LinkedIn/Github profiles alongside a job posting found online or LinkedIn API.
+During the job hunting process while dealing with job searching, resume reviews and interview prep sessions one of the tedious things to deal with is writing cover letters for a job posting . Many people have trouble creating cover letters by scratch because we need to structure the letter based on the position/company we are applying to. These postings can be different roles, skills and experience levels. Users will authenticate using Friebase Auth. This profile will consist with basic user information, 
+ and their resume. We will use the OpenAI API to generate cover letters by feeding the model their resume and any further feature you guys can create for yourself!
 
-- User to Sign In with a Google Account
-- Profile section that includes file uploaded resume and connected to LinkedIn and Github accounts
-- Use LinkedIn API to obtain user skills and recommended job postings (Required)
+- User to Sign In with email and password
+- Profile section that includes file uploaded resume and email
 - Use Github API to obtain repos and used tools in popular repositories as supplementary information to model (Optional)
 - Use OpenAI API as model to feed all relevant User information to generate a cover letter based on a User specified job posting
 - Feedback section users can comment to improve model
@@ -19,39 +19,25 @@ During the job hunting process while dealing with job searching, resume reviews 
 
 **API Endpoints**
 
-These endpoints will deal with database operations using MongoDB drivers and OAuth 2.0
+These endpoints were developed using Firebase's Cloud Functions and Express JS
 
 **User Authentication and Profile**
 
-- `/api/auth/google`: Endpoint for Google authentication.
-- `/api/user/profile`: Endpoint to retrieve and update user profile information. (GET & PUT)
-- `/api/user/resume`: Endpoint to handle resume upload and retrieval. (GET & PUT)
-
-**LinkedIn Integration**
-
-- `/api/linkedin/connect`: Endpoint to initiate the LinkedIn connection.
-- `/api/linkedin/skills`: Endpoint to retrieve user skills from LinkedIn.
-- `/api/linkedin/recommendations`: Endpoint to obtain job recommendations
-
-**Github Integration**
-
-- `/api/github/connect`: Endpoint to initiate the GitHub connection.
-- `/api/github/repos`: Endpoint to retrieve user repositories from GitHub.
+- User Authentication was done using Firebase and using React Context API
+- Email and Password Auth
+- Session Auth State Persistance
 
 **Cover Letter Generation**
 
-- `/api/generate/coverletter`: Endpoint to trigger the cover letter generation process.
-- `/api/feedback/coverletter`: Endpoint to collect user feedback on generated cover letters.
+- `/api/generate/coverletter`: Endpoint to trigger the cover letter generation process. Done with Firebase CLoud Function and OpenAI API Node JS SDK
 
 **Tech Stack**
 
-- MERN stack
+- React JS
+- Node JS / Express JS
+- Firebase
+- React Bootstrap
 - Postman
 - Figma
-- AWS
-- Docker
-- Google/LinkedIn/Open AI API
+- API
 
-**Comments**
-
-- Perhaps no need for Github OAuth 2.0 portion
